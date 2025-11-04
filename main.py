@@ -1,4 +1,8 @@
+import re
 from collections import UserDict
+
+
+PHONE_REGEX = re.compile(r"\d{10}")
 
 
 class Field:
@@ -28,11 +32,10 @@ class Name(Field):
 
 class Phone(Field):
     @Field.value.setter
-    def value(self, new_value):
-        digits = "".join(filter(str.isdigit, str(new_value)))
-        if len(digits) != 10:
+    def value(self, new_phone_number):
+        if not PHONE_REGEX.fullmatch(str(new_phone_number)):
             raise ValueError("Phone number must contain exactly 10 digits.")
-        self._value = digits
+        self._value = new_phone_number
 
 
 class Record:
@@ -62,7 +65,8 @@ class Record:
         return None
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        phones = "; ".join(phone.value for phone in self.phones)
+        return f"Contact name: {self.name.value}, phones: {phones}"
 
 
 class AddressBook(UserDict):
