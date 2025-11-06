@@ -60,7 +60,7 @@ class Record:
 
     def find_phone(self, phone):
         for phone_obj in self.phones:
-            if phone_obj.value == "".join(filter(str.isdigit, str(phone))):
+            if phone_obj.value == phone:
                 return phone_obj
         return None
 
